@@ -13,13 +13,8 @@ class _EmailWebViewState extends State<EmailWebView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Expanded(
-          child: _configureInAppWebView(email),
-        ),
-      ),
+      color: Colors.yellow,
+      child: _configureInAppWebView(email),
     );
   }
 
@@ -41,12 +36,17 @@ class _EmailWebViewState extends State<EmailWebView> {
           horizontalScrollBarEnabled: true,
           useShouldOverrideUrlLoading: true,
           disableContextMenu: true,
+
         ),
         ios: IOSInAppWebViewOptions(
-          enableViewportScale: true,
+          enableViewportScale: false,
+          maximumZoomScale: 0.5,
+          minimumZoomScale: 0.5
+
         ),
         android: AndroidInAppWebViewOptions(
-          useWideViewPort: false,
+          useWideViewPort: true,
+          initialScale: 1
         ),
       ),
       onWebViewCreated: (InAppWebViewController controller) async {
@@ -57,16 +57,13 @@ class _EmailWebViewState extends State<EmailWebView> {
         await controller.clearCache();
         await controller.clearFocus();
         await controller.clearMatches();
+
+
       },
       onLoadStop: (InAppWebViewController controller, String url) async {
         await controller.clearCache();
         await controller.clearFocus();
         await controller.clearMatches();
-
-        // Adding additional css to WebView for the Dark/Light Mode.
-        await controller.injectCSSCode(
-            source: _cssStyleForDarkMode());
-
       },
 
     );
@@ -75,7 +72,9 @@ class _EmailWebViewState extends State<EmailWebView> {
   String _cssStyleForDarkMode() {
     var width = MediaQuery.of(context).size.width - 30;
 
-    return '''<style type="text/css">
+    return '''
+    
+    <style type="text/css">
 :root {
     color-scheme: dark;
     supported-color-schemes: dark;

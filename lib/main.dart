@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutterwebview/email_web_view.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+
   runApp(MyApp());
 }
 
